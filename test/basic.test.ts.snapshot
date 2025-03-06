@@ -1,3 +1,42 @@
+exports[`scanUrl > #invalid Hello\\nGo to http://example.com/%E4%BD%A0%E5%A5%BD... 1`] = `
+## Input
+    1 | Hello
+    2 | Go to http://example.com/%E4%BD%A0%E5%A5%BD for more info
+
+## Output
+  > (1)
+
+      1 | Hello
+    > 2 | Go to http://example.com/%E4%BD%A0%E5%A5%BD for more info
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Hello\\nGo to http://example.com/?a=b?? for more in... 1`] = `
+## Input
+    1 | Hello
+    2 | Go to http://example.com/?a=b?? for more info
+
+## Output
+  > (1)
+
+      1 | Hello
+    > 2 | Go to http://example.com/?a=b?? for more info
+        |       ^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Hello\\nGo to http://example.com/你好 for more info 1`] = `
+## Input
+    1 | Hello
+    2 | Go to http://example.com/你好 for more info
+
+## Output
+  > (1)
+
+      1 | Hello
+    > 2 | Go to http://example.com/你好 for more info
+        |       ^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid See https://example.com/issue/1234 for details. 1`] = `
 ## Input
     1 | See https://example.com/issue/1234 for details.

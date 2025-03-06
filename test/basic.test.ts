@@ -14,5 +14,17 @@ defineTest("scanUrl", {
 		"see https://example.com{new line",
 		"see https://example.com and https://example2.com",
 		"see https://example.com?foo=bar and https://example2.com",
+		outdent`
+			Hello
+			Go to http://example.com/%E4%BD%A0%E5%A5%BD for more info
+		`,
+		outdent`
+			Hello
+			Go to http://example.com/你好 for more info
+		`,
+		outdent`
+			Hello
+			Go to http://example.com/?a=b?? for more info
+		`,
 	],
 });
