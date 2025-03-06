@@ -16,6 +16,8 @@ export interface URLRecord {
 export function scanUrl(text: string): URLRecord[] {
 	const urls: URLRecord[] = [];
 	const urlStartRegex = /https?:\/\//g; // 匹配 URL 的起始部分
+	// RFC 3986 定义的 URL 允许的字符集
+	// https://datatracker.ietf.org/doc/html/rfc3986#section-2.3
 	const allowedChars = new Set(
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%"
 	);
