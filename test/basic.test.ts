@@ -26,5 +26,6 @@ defineTest("scanUrl", {
 			Hello
 			Go to http://example.com/?a=b?? for more info
 		`,
+		'// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736='
 	],
 });

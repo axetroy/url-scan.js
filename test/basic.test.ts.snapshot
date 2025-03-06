@@ -1,3 +1,14 @@
+exports[`scanUrl > #invalid // Copied from https://github.com/facebook/regener... 1`] = `
+## Input
+    1 | // Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
+
+## Output
+  > (1)
+
+    > 1 | // Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
+        |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid Hello\\nGo to http://example.com/%E4%BD%A0%E5%A5%BD... 1`] = `
 ## Input
     1 | Hello

@@ -29,6 +29,8 @@ export function defineTest(name: string, options: TestOptions) {
 			test(`#invalid ${title}`, (t) => {
 				const results = scanUrl(input);
 
+				assert.ok(results.length > 0, "should match at least one URL");
+
 				for (const result of results) {
 					assert.deepEqual(result.url, input.slice(result.start, result.end));
 				}
