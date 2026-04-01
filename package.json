@@ -47,15 +47,20 @@
         "typescript": "^5.7.2"
     },
     "keywords": [
-        "ecma",
-        "detector"
+        "url",
+        "scanner",
+        "parser",
+        "extractor",
+        "http",
+        "https",
+        "link"
     ],
-    "homepage": "https://github.com/axetroy/ecma-detector#readme",
+    "homepage": "https://github.com/axetroy/url-scan.js#readme",
     "bugs": {
-        "url": "https://github.com/axetroy/ecma-detector/issues"
+        "url": "https://github.com/axetroy/url-scan.js/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/axetroy/ecma-detector.git"
+        "url": "git+https://github.com/axetroy/url-scan.js.git"
     }
 }

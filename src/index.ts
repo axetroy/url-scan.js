@@ -23,8 +23,6 @@ export function scanUrl(text: string): URLRecord[] {
 	);
 
 	let match: RegExpExecArray | null;
-	let line = 1;
-	let column = 1;
 
 	while ((match = urlStartRegex.exec(text)) !== null) {
 		const start = match.index;
