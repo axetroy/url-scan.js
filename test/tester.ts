@@ -11,7 +11,7 @@ interface TestOptions {
 
 export function defineTest(name: string, options: TestOptions) {
 	describe(name, () => {
-		// valid
+		// 有效输入（不应提取出任何 URL）
 		for (const input of options.valid) {
 			const title = maxLength(removeNewlines(input), 50);
 
@@ -22,7 +22,7 @@ export function defineTest(name: string, options: TestOptions) {
 			});
 		}
 
-		// invalid
+		// 无效输入（应至少提取出一个 URL）
 		for (const input of options.invalid) {
 			const title = maxLength(removeNewlines(input), 50);
 

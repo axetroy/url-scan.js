@@ -9,6 +9,101 @@ exports[`scanUrl > #invalid // Copied from https://github.com/facebook/regener..
         |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid API docs at http://example.com/docs 1`] = `
+## Input
+    1 | API docs at http://example.com/docs
+
+## Output
+  > (1)
+
+    > 1 | API docs at http://example.com/docs
+        |             ^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid API endpoint: https://api.example.com:8080/v1/user... 1`] = `
+## Input
+    1 | API endpoint: https://api.example.com:8080/v1/users
+
+## Output
+  > (1)
+
+    > 1 | API endpoint: https://api.example.com:8080/v1/users
+        |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Check [the docs](https://docs.example.com/api) for... 1`] = `
+## Input
+    1 | Check [the docs](https://docs.example.com/api) for usage.
+
+## Output
+  > (1)
+
+    > 1 | Check [the docs](https://docs.example.com/api) for usage.
+        |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Contact at <https://example.com/contact> 1`] = `
+## Input
+    1 | Contact at <https://example.com/contact>
+
+## Output
+  > (1)
+
+    > 1 | Contact at <https://example.com/contact>
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Dashboard: http://admin:secret@example.com/panel 1`] = `
+## Input
+    1 | Dashboard: http://admin:secret@example.com/panel
+
+## Output
+  > (1)
+
+    > 1 | Dashboard: http://admin:secret@example.com/panel
+        |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Dev server at http://localhost:3000/dashboard 1`] = `
+## Input
+    1 | Dev server at http://localhost:3000/dashboard
+
+## Output
+  > (1)
+
+    > 1 | Dev server at http://localhost:3000/dashboard
+        |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid First: https://example.com/page1\\nSecond: https://... 1`] = `
+## Input
+    1 | First: https://example.com/page1
+    2 | Second: https://example.com/page2
+    3 | Third: https://example.com/page3
+
+## Output
+  > (1)
+
+    > 1 | First: https://example.com/page1
+        |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+      2 | Second: https://example.com/page2
+      3 | Third: https://example.com/page3
+
+  > (2)
+
+      1 | First: https://example.com/page1
+    > 2 | Second: https://example.com/page2
+        |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+      3 | Third: https://example.com/page3
+
+  > (3)
+
+      1 | First: https://example.com/page1
+      2 | Second: https://example.com/page2
+    > 3 | Third: https://example.com/page3
+        |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid Hello\\nGo to http://example.com/%E4%BD%A0%E5%A5%BD... 1`] = `
 ## Input
     1 | Hello
@@ -48,6 +143,39 @@ exports[`scanUrl > #invalid Hello\\nGo to http://example.com/你好 for more inf
         |       ^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid Homepage is https://example.com/ — bookmark it. 1`] = `
+## Input
+    1 | Homepage is https://example.com/ — bookmark it.
+
+## Output
+  > (1)
+
+    > 1 | Homepage is https://example.com/ — bookmark it.
+        |             ^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Internal API: http://192.168.1.100:8080/api/v2 1`] = `
+## Input
+    1 | Internal API: http://192.168.1.100:8080/api/v2
+
+## Output
+  > (1)
+
+    > 1 | Internal API: http://192.168.1.100:8080/api/v2
+        |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Read https://example.com/docs#installation for set... 1`] = `
+## Input
+    1 | Read https://example.com/docs#installation for setup.
+
+## Output
+  > (1)
+
+    > 1 | Read https://example.com/docs#installation for setup.
+        |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid See https://example.com/issue/1234 for details. 1`] = `
 ## Input
     1 | See https://example.com/issue/1234 for details.
@@ -59,6 +187,82 @@ exports[`scanUrl > #invalid See https://example.com/issue/1234 for details. 1`] 
         |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid Visit https://example.com 1`] = `
+## Input
+    1 | Visit https://example.com
+
+## Output
+  > (1)
+
+    > 1 | Visit https://example.com
+        |       ^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid const endpoint = \"https://api.example.com/v1/data\"... 1`] = `
+## Input
+    1 | const endpoint = "https://api.example.com/v1/data";
+
+## Output
+  > (1)
+
+    > 1 | const endpoint = "https://api.example.com/v1/data";
+        |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://a.example.com https://b.example.com https:... 1`] = `
+## Input
+    1 | https://a.example.com https://b.example.com https://c.example.com
+
+## Output
+  > (1)
+
+    > 1 | https://a.example.com https://b.example.com https://c.example.com
+        | ^^^^^^^^^^^^^^^^^^^^^
+
+  > (2)
+
+    > 1 | https://a.example.com https://b.example.com https://c.example.com
+        |                       ^^^^^^^^^^^^^^^^^^^^^
+
+  > (3)
+
+    > 1 | https://a.example.com https://b.example.com https://c.example.com
+        |                                             ^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://api.v2.example.com/endpoint 1`] = `
+## Input
+    1 | https://api.v2.example.com/endpoint
+
+## Output
+  > (1)
+
+    > 1 | https://api.v2.example.com/endpoint
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com is the site. 1`] = `
+## Input
+    1 | https://example.com is the site.
+
+## Output
+  > (1)
+
+    > 1 | https://example.com is the site.
+        | ^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com/a/b/c/d.html 1`] = `
+## Input
+    1 | https://example.com/a/b/c/d.html
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/a/b/c/d.html
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid https://example.com/issue/1234 1`] = `
 ## Input
     1 | https://example.com/issue/1234
@@ -68,6 +272,72 @@ exports[`scanUrl > #invalid https://example.com/issue/1234 1`] = `
 
     > 1 | https://example.com/issue/1234
         | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com/path?key=value#section-1 1`] = `
+## Input
+    1 | https://example.com/path?key=value#section-1
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/path?key=value#section-1
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com/search?q=%E4%B8%AD%E6%96%87 1`] = `
+## Input
+    1 | https://example.com/search?q=%E4%B8%AD%E6%96%87
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/search?q=%E4%B8%AD%E6%96%87
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com/search?q=hello+world&lang=en&p... 1`] = `
+## Input
+    1 | https://example.com/search?q=hello+world&lang=en&page=2
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/search?q=hello+world&lang=en&page=2
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://example.com/very/long/path/to/some/resourc... 1`] = `
+## Input
+    1 | https://example.com/very/long/path/to/some/resource.json?format=pretty&indent=2&timestamp=1234567890#results
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/very/long/path/to/some/resource.json?format=pretty&indent=2&timestamp=1234567890#results
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid https://redirect.example.com/?next=https://target.... 1`] = `
+## Input
+    1 | https://redirect.example.com/?next=https://target.example.com/page
+
+## Output
+  > (1)
+
+    > 1 | https://redirect.example.com/?next=https://target.example.com/page
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid redirect_url=https://example.com/callback?code=abc 1`] = `
+## Input
+    1 | redirect_url=https://example.com/callback?code=abc
+
+## Output
+  > (1)
+
+    > 1 | redirect_url=https://example.com/callback?code=abc
+        |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
 exports[`scanUrl > #invalid see https://example.com and https://example2.com 1`] = `
