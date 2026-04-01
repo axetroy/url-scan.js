@@ -8,9 +8,9 @@ export interface URLRecord {
 	};
 }
 
-// Precomputed ASCII lookup table for RFC 3986 allowed URL characters.
-// URL_CHAR_TABLE[charCode] === 1 means the character is allowed inside a URL.
-// Using a Uint8Array gives O(1) lookup with minimal memory overhead.
+// 预先计算的 ASCII 字符查找表，用于判断字符是否为 RFC 3986 允许的 URL 字符。
+// URL_CHAR_TABLE[charCode] === 1 表示该字符可出现在 URL 中。
+// 使用 Uint8Array 实现 O(1) 查找，内存开销极小。
 // https://datatracker.ietf.org/doc/html/rfc3986#section-2
 const URL_CHAR_TABLE = ((): Uint8Array => {
 	const t = new Uint8Array(128);
@@ -21,16 +21,16 @@ const URL_CHAR_TABLE = ((): Uint8Array => {
 })();
 
 /**
- * State machine states for URL scheme recognition and body collection.
+ * URL 协议识别与主体收集的状态机状态枚举。
  *
- * Full state transition diagram:
+ * 完整状态转换图：
  *
  *   IDLE ─'h'→ H ─'t'→ HT ─'t'→ HTT ─'p'→ HTTP ─'s'→ HTTP_S ─':'→ COLON
  *                                              └──────────────':'──────────> COLON
- *   COLON ─'/'→ SLASH ─'/'→ URL ─(allowed chars)→ URL ─(disallowed)→ emit & reset
+ *   COLON ─'/'→ SLASH ─'/'→ URL ─(合法字符)→ URL ─(非法字符)→ 输出并重置
  *
- * Any unexpected character while matching the scheme resets the automaton to IDLE.
- * If the unexpected character is 'h', a new attempt is started immediately.
+ * 在识别协议头的过程中，遇到意外字符会将自动机重置为 IDLE 状态。
+ * 若该意外字符恰好是 'h'，则立即从此处重新开始一次新的匹配尝试。
  */
 enum State {
 	IDLE = 0,
@@ -45,16 +45,15 @@ enum State {
 }
 
 /**
- * Scan text for HTTP/HTTPS URLs and return each one with its character-index
- * range and 1-based line/column location.
+ * 从文本中扫描所有 HTTP/HTTPS URL，并返回每个 URL 的字符索引范围
+ * 及其以 1 为起始值的行列位置信息。
  *
- * Implementation uses a single-pass state machine that maintains line/column
- * counters as it advances through the text, so the overall time complexity is
- * O(n) regardless of the number of URLs found — avoiding the O(n·m) cost of
- * the naive approach of slicing and splitting the text once per discovered URL.
+ * 实现采用单遍扫描状态机，在遍历文本的同时同步维护行列计数器，
+ * 因此整体时间复杂度为 O(n)，与找到的 URL 数量无关——
+ * 避免了朴素方案中每发现一个 URL 就进行一次 slice/split 的 O(n·m) 开销。
  *
- * @param text - The input text to scan.
- * @returns Array of URLRecord objects, one per discovered URL.
+ * @param text - 待扫描的输入文本。
+ * @returns 每个发现的 URL 对应一个 URLRecord 对象组成的数组。
  */
 export function scanUrl(text: string): URLRecord[] {
 	const urls: URLRecord[] = [];
@@ -62,23 +61,22 @@ export function scanUrl(text: string): URLRecord[] {
 
 	let state: State = State.IDLE;
 
-	// Current character position tracking (1-based line and column).
-	// At the start of each loop iteration these values reflect the position
-	// of text[pos]; they are updated at the end of each iteration.
+	// 当前字符的位置追踪（行号和列号均以 1 为起始值）。
+	// 每次循环迭代开始时，这两个变量反映 text[pos] 的位置；
+	// 在每次迭代结束时更新。
 	let line = 1;
 	let col = 1;
 
-	// Start metadata for the current URL candidate (recorded when 'h' is seen).
+	// 当前 URL 候选的起始元数据（在首次识别到 'h' 时记录）。
 	let urlStart = 0;
 	let urlStartLine = 1;
 	let urlStartCol = 1;
 
 	/**
-	 * Try to emit the URL candidate covering text[urlStart, end).
-	 * Called when the character at index `end` (= `pos` at the call site) is the
-	 * first character that does not belong to the URL.  At that point `line` and
-	 * `col` reflect the position of that terminating character, which is exactly
-	 * the exclusive-end position used for `loc.end`.
+	 * 尝试将 text[urlStart, end) 范围内的 URL 候选输出到结果列表。
+	 * 在调用处，索引 `end`（即调用时的 `pos`）指向第一个不属于 URL 的字符，
+	 * 此时 `line` 和 `col` 反映的正是该终止字符的位置，
+	 * 恰好用作 `loc.end` 的开区间结束位置。
 	 */
 	function emitIfValid(end: number): void {
 		const url = text.slice(urlStart, end);
@@ -112,7 +110,7 @@ export function scanUrl(text: string): URLRecord[] {
 				if (code === 0x74 /* 't' */) {
 					state = State.HT;
 				} else if (code === 0x68 /* 'h' */) {
-					// New 'h' — restart scheme detection from here.
+					// 遇到新的 'h'，从当前位置重新开始协议识别。
 					urlStart = pos;
 					urlStartLine = line;
 					urlStartCol = col;
@@ -203,10 +201,10 @@ export function scanUrl(text: string): URLRecord[] {
 
 			case State.URL:
 				if (code >= 128 || URL_CHAR_TABLE[code] === 0) {
-					// Non-URL character — finalize the current URL candidate.
+					// 遇到非 URL 字符——结束当前 URL 候选。
 					emitIfValid(pos);
 					if (code === 0x68 /* 'h' */) {
-						// Immediately start a new scheme attempt.
+						// 立即从此处开始新一轮协议匹配。
 						state = State.H;
 						urlStart = pos;
 						urlStartLine = line;
@@ -215,11 +213,11 @@ export function scanUrl(text: string): URLRecord[] {
 						state = State.IDLE;
 					}
 				}
-				// else: valid URL character — stay in URL state.
+				// 否则：合法 URL 字符，保持 URL 状态继续扫描。
 				break;
 		}
 
-		// Advance line/column tracking after processing the character.
+		// 处理完当前字符后，更新行列追踪计数器。
 		if (code === 0x0a /* '\n' */) {
 			line++;
 			col = 1;
@@ -228,7 +226,7 @@ export function scanUrl(text: string): URLRecord[] {
 		}
 	}
 
-	// Handle a URL that extends to the very end of the input.
+	// 处理延伸至输入末尾的 URL。
 	if (state === State.URL) {
 		emitIfValid(n);
 	}

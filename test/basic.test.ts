@@ -3,105 +3,105 @@ import { defineTest } from "./tester";
 
 defineTest("scanUrl", {
 	valid: [
-		// No URL patterns at all
+		// 不含任何 URL 模式
 		"hello world",
-		// Empty string
+		// 空字符串
 		"",
-		// Scheme only — no host, fails URL validation
+		// 仅有协议头，缺少主机名，URL 验证失败
 		"http://",
 		"https://",
-		// Space inside scheme breaks detection before host is reached
+		// 协议头中含有空格，在到达主机名前就中断了检测
 		"http:// example.com",
-		// Unsupported schemes are not detected
+		// 不支持的协议头，不会被检测
 		"ftp://example.com",
 		"ssh://user@example.com",
-		// Uppercase scheme — state machine only matches lowercase 'h'
+		// 大写协议头——状态机仅匹配小写 'h'
 		"HTTP://example.com",
 		"HTTPS://example.com",
-		// Missing scheme
+		// 缺少协议头
 		"see link at www.example.com for more",
-		// Broken scheme sequences
+		// 协议头序列不完整
 		"htt p://example.com",
 		"h ttp://example.com",
-		// user@host email — no http/https scheme
+		// user@host 格式的邮件地址——没有 http/https 协议头
 		"contact user@example.com for info",
 	],
 	invalid: [
-		// ── Basic extractions ────────────────────────────────────────────────
+		// ── 基本提取 ─────────────────────────────────────────────────────────
 		"See https://example.com/issue/1234 for details.",
 		"https://example.com/issue/1234",
-		// ── HTTP (non-HTTPS) ─────────────────────────────────────────────────
+		// ── HTTP（非 HTTPS）──────────────────────────────────────────────────
 		"API docs at http://example.com/docs",
-		// ── URL terminators ───────────────────────────────────────────────────
+		// ── URL 终止符 ────────────────────────────────────────────────────────
 		outdent`
 			see https://example.com
 			new line
 		`,
 		"see https://example.com;new line",
 		"see https://example.com{new line",
-		// ── Multiple URLs ─────────────────────────────────────────────────────
+		// ── 多个 URL ──────────────────────────────────────────────────────────
 		"see https://example.com and https://example2.com",
 		"see https://example.com?foo=bar and https://example2.com",
-		// ── URL with port ─────────────────────────────────────────────────────
+		// ── 含端口号的 URL ────────────────────────────────────────────────────
 		"API endpoint: https://api.example.com:8080/v1/users",
 		"Dev server at http://localhost:3000/dashboard",
-		// ── URL with path segments ────────────────────────────────────────────
+		// ── 含路径段的 URL ────────────────────────────────────────────────────
 		"https://example.com/a/b/c/d.html",
-		// ── URL with query string ─────────────────────────────────────────────
+		// ── 含查询字符串的 URL ────────────────────────────────────────────────
 		"https://example.com/search?q=hello+world&lang=en&page=2",
-		// ── URL with fragment ─────────────────────────────────────────────────
+		// ── 含片段标识符的 URL ────────────────────────────────────────────────
 		"Read https://example.com/docs#installation for setup.",
-		// ── URL with both query and fragment ──────────────────────────────────
+		// ── 同时含查询字符串和片段标识符的 URL ───────────────────────────────
 		"https://example.com/path?key=value#section-1",
-		// ── Percent-encoded characters ────────────────────────────────────────
+		// ── 百分号编码字符 ────────────────────────────────────────────────────
 		outdent`
 			Hello
 			Go to http://example.com/%E4%BD%A0%E5%A5%BD for more info
 		`,
 		"https://example.com/search?q=%E4%B8%AD%E6%96%87",
-		// ── Non-ASCII characters terminate scanning ───────────────────────────
+		// ── 非 ASCII 字符终止扫描 ─────────────────────────────────────────────
 		outdent`
 			Hello
 			Go to http://example.com/你好 for more info
 		`,
-		// ── Double question marks in query ────────────────────────────────────
+		// ── 查询字符串中的双问号 ──────────────────────────────────────────────
 		outdent`
 			Hello
 			Go to http://example.com/?a=b?? for more info
 		`,
-		// ── URL with user-info (auth) ─────────────────────────────────────────
+		// ── 含用户信息（认证）的 URL ──────────────────────────────────────────
 		"Dashboard: http://admin:secret@example.com/panel",
-		// ── IP address URLs ───────────────────────────────────────────────────
+		// ── IP 地址形式的 URL ─────────────────────────────────────────────────
 		"Internal API: http://192.168.1.100:8080/api/v2",
-		// ── Subdomain ─────────────────────────────────────────────────────────
+		// ── 子域名 ────────────────────────────────────────────────────────────
 		"https://api.v2.example.com/endpoint",
-		// ── Trailing slash ────────────────────────────────────────────────────
+		// ── 末尾斜杠 ──────────────────────────────────────────────────────────
 		"Homepage is https://example.com/ — bookmark it.",
-		// ── URL at start of text ──────────────────────────────────────────────
+		// ── URL 位于文本开头 ──────────────────────────────────────────────────
 		"https://example.com is the site.",
-		// ── URL at end of text ────────────────────────────────────────────────
+		// ── URL 位于文本末尾 ──────────────────────────────────────────────────
 		"Visit https://example.com",
-		// ── URL surrounded by angle brackets ──────────────────────────────────
+		// ── 被尖括号包围的 URL ────────────────────────────────────────────────
 		"Contact at <https://example.com/contact>",
-		// ── URL in markdown link syntax ───────────────────────────────────────
+		// ── Markdown 链接语法中的 URL ─────────────────────────────────────────
 		"Check [the docs](https://docs.example.com/api) for usage.",
-		// ── URL after an equals sign ──────────────────────────────────────────
+		// ── 等号之后的 URL ────────────────────────────────────────────────────
 		"redirect_url=https://example.com/callback?code=abc",
-		// ── URL in a code string literal ──────────────────────────────────────
+		// ── 代码字符串字面量中的 URL ──────────────────────────────────────────
 		'const endpoint = "https://api.example.com/v1/data";',
-		// ── Consecutive URLs separated only by whitespace ─────────────────────
+		// ── 仅由空格分隔的连续 URL ────────────────────────────────────────────
 		"https://a.example.com https://b.example.com https://c.example.com",
-		// ── Multiple URLs on different lines ──────────────────────────────────
+		// ── 分布在不同行的多个 URL ────────────────────────────────────────────
 		outdent`
 			First: https://example.com/page1
 			Second: https://example.com/page2
 			Third: https://example.com/page3
 		`,
-		// ── Nested URL inside a query parameter ───────────────────────────────
+		// ── 查询参数中嵌套的 URL ──────────────────────────────────────────────
 		"https://redirect.example.com/?next=https://target.example.com/page",
-		// ── GitHub-style URL with hash fragment and trailing = ────────────────
+		// ── 含片段标识符和末尾等号的 GitHub 风格 URL ─────────────────────────
 		'// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=',
-		// ── Long URL with many path segments and query params ─────────────────
+		// ── 含大量路径段和查询参数的长 URL ───────────────────────────────────
 		"https://example.com/very/long/path/to/some/resource.json?format=pretty&indent=2&timestamp=1234567890#results",
 	],
 });
