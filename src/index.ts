@@ -79,15 +79,20 @@ export function scanUrl(text: string): URLRecord[] {
 	 * 恰好用作 `loc.end` 的开区间结束位置。
 	 */
 	function emitIfValid(end: number): void {
-		const url = text.slice(urlStart, end);
+		const raw = text.slice(urlStart, end);
+		const trimmedLen = trimUrlEnd(raw);
+		const url = raw.slice(0, trimmedLen);
+		const trimmedEnd = urlStart + trimmedLen;
+		// 已裁剪的字符数（均为 ASCII，不含换行），列号相应回退。
+		const trimmedCols = raw.length - trimmedLen;
 		if (isValidUrl(url)) {
 			urls.push({
 				url,
 				start: urlStart,
-				end,
+				end: trimmedEnd,
 				loc: {
 					start: { line: urlStartLine, column: urlStartCol },
-					end: { line, column: col },
+					end: { line, column: col - trimmedCols },
 				},
 			});
 		}
@@ -200,7 +205,7 @@ export function scanUrl(text: string): URLRecord[] {
 				break;
 
 			case State.URL:
-				if (code >= 128 || URL_CHAR_TABLE[code] === 0) {
+				if (code < 128 && URL_CHAR_TABLE[code] === 0) {
 					// 遇到非 URL 字符——结束当前 URL 候选。
 					emitIfValid(pos);
 					if (code === 0x68 /* 'h' */) {
@@ -246,4 +251,34 @@ function isValidUrl(url: string): boolean {
 	} catch {
 		return false;
 	}
+}
+
+/**
+ * 去除 URL 尾部常见的噪音标点符号，返回裁剪后的字符串长度。
+ * 例如：句号、逗号、感叹号、问号、右括号、右方括号。
+ *
+ * @param url - 待裁剪的 URL 候选字符串。
+ * @returns 裁剪后的有效字符数（从字符串开头计算）。
+ */
+function trimUrlEnd(url: string): number {
+	let end = url.length;
+
+	while (end > 0) {
+		const c = url.charCodeAt(end - 1);
+
+		if (
+			c === 0x2e || // .
+			c === 0x2c || // ,
+			c === 0x21 || // !
+			c === 0x3f || // ?
+			c === 0x29 || // )
+			c === 0x5d    // ]
+		) {
+			end--;
+		} else {
+			break;
+		}
+	}
+
+	return end;
 }
