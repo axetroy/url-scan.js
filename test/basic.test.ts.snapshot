@@ -39,7 +39,18 @@ exports[`scanUrl > #invalid Check [the docs](https://docs.example.com/api) for..
   > (1)
 
     > 1 | Check [the docs](https://docs.example.com/api) for usage.
-        |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Click https://a.com/test! now. 1`] = `
+## Input
+    1 | Click https://a.com/test! now.
+
+## Output
+  > (1)
+
+    > 1 | Click https://a.com/test! now.
+        |       ^^^^^^^^^^^^^^^^^^
 `;
 
 exports[`scanUrl > #invalid Contact at <https://example.com/contact> 1`] = `
@@ -75,6 +86,17 @@ exports[`scanUrl > #invalid Dev server at http://localhost:3000/dashboard 1`] = 
         |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid Docs [https://a.com/test] here. 1`] = `
+## Input
+    1 | Docs [https://a.com/test] here.
+
+## Output
+  > (1)
+
+    > 1 | Docs [https://a.com/test] here.
+        |       ^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid First: https://example.com/page1\\nSecond: https://... 1`] = `
 ## Input
     1 | First: https://example.com/page1
@@ -104,6 +126,17 @@ exports[`scanUrl > #invalid First: https://example.com/page1\\nSecond: https://.
         |        ^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid Found at https://a.com/test, see also. 1`] = `
+## Input
+    1 | Found at https://a.com/test, see also.
+
+## Output
+  > (1)
+
+    > 1 | Found at https://a.com/test, see also.
+        |          ^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid Hello\\nGo to http://example.com/%E4%BD%A0%E5%A5%BD... 1`] = `
 ## Input
     1 | Hello
@@ -127,7 +160,7 @@ exports[`scanUrl > #invalid Hello\\nGo to http://example.com/?a=b?? for more in.
 
       1 | Hello
     > 2 | Go to http://example.com/?a=b?? for more info
-        |       ^^^^^^^^^^^^^^^^^^^^^^^^^
+        |       ^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
 exports[`scanUrl > #invalid Hello\\nGo to http://example.com/你好 for more info 1`] = `
@@ -140,7 +173,7 @@ exports[`scanUrl > #invalid Hello\\nGo to http://example.com/你好 for more inf
 
       1 | Hello
     > 2 | Go to http://example.com/你好 for more info
-        |       ^^^^^^^^^^^^^^^^^^^
+        |       ^^^^^^^^^^^^^^^^^^^^^
 `;
 
 exports[`scanUrl > #invalid Homepage is https://example.com/ — bookmark it. 1`] = `
@@ -165,6 +198,17 @@ exports[`scanUrl > #invalid Internal API: http://192.168.1.100:8080/api/v2 1`] =
         |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid Is it https://a.com/test? yes. 1`] = `
+## Input
+    1 | Is it https://a.com/test? yes.
+
+## Output
+  > (1)
+
+    > 1 | Is it https://a.com/test? yes.
+        |       ^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid Read https://example.com/docs#installation for set... 1`] = `
 ## Input
     1 | Read https://example.com/docs#installation for setup.
@@ -176,6 +220,17 @@ exports[`scanUrl > #invalid Read https://example.com/docs#installation for set..
         |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid See (https://a.com/test) for details. 1`] = `
+## Input
+    1 | See (https://a.com/test) for details.
+
+## Output
+  > (1)
+
+    > 1 | See (https://a.com/test) for details.
+        |      ^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid See https://example.com/issue/1234 for details. 1`] = `
 ## Input
     1 | See https://example.com/issue/1234 for details.
@@ -185,6 +240,28 @@ exports[`scanUrl > #invalid See https://example.com/issue/1234 for details. 1`] 
 
     > 1 | See https://example.com/issue/1234 for details.
         |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid See https://example.com/path/🎉/page for info 1`] = `
+## Input
+    1 | See https://example.com/path/🎉/page for info
+
+## Output
+  > (1)
+
+    > 1 | See https://example.com/path/🎉/page for info
+        |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid Visit https://a.com/test. for more. 1`] = `
+## Input
+    1 | Visit https://a.com/test. for more.
+
+## Output
+  > (1)
+
+    > 1 | Visit https://a.com/test. for more.
+        |       ^^^^^^^^^^^^^^^^^^
 `;
 
 exports[`scanUrl > #invalid Visit https://example.com 1`] = `
@@ -307,6 +384,17 @@ exports[`scanUrl > #invalid https://example.com/search?q=hello+world&lang=en&p..
         | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `;
 
+exports[`scanUrl > #invalid https://example.com/search?q=中文关键词 1`] = `
+## Input
+    1 | https://example.com/search?q=中文关键词
+
+## Output
+  > (1)
+
+    > 1 | https://example.com/search?q=中文关键词
+        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`;
+
 exports[`scanUrl > #invalid https://example.com/very/long/path/to/some/resourc... 1`] = `
 ## Input
     1 | https://example.com/very/long/path/to/some/resource.json?format=pretty&indent=2&timestamp=1234567890#results
@@ -405,4 +493,15 @@ exports[`scanUrl > #invalid see https://example.com{new line 1`] = `
 
     > 1 | see https://example.com{new line
         |     ^^^^^^^^^^^^^^^^^^^
+`;
+
+exports[`scanUrl > #invalid 访问 https://example.com/中文路径 获取详情 1`] = `
+## Input
+    1 | 访问 https://example.com/中文路径 获取详情
+
+## Output
+  > (1)
+
+    > 1 | 访问 https://example.com/中文路径 获取详情
+        |    ^^^^^^^^^^^^^^^^^^^^^^^^
 `;

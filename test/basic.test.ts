@@ -59,12 +59,12 @@ defineTest("scanUrl", {
 			Go to http://example.com/%E4%BD%A0%E5%A5%BD for more info
 		`,
 		"https://example.com/search?q=%E4%B8%AD%E6%96%87",
-		// ── 非 ASCII 字符终止扫描 ─────────────────────────────────────────────
+		// ── 含中文路径的 URL（非 ASCII 字符应被保留在 URL 中） ───────────────
 		outdent`
 			Hello
 			Go to http://example.com/你好 for more info
 		`,
-		// ── 查询字符串中的双问号 ──────────────────────────────────────────────
+		// ── 查询字符串中的双问号（尾部噪音问号应被裁剪） ────────────────────
 		outdent`
 			Hello
 			Go to http://example.com/?a=b?? for more info
@@ -103,5 +103,17 @@ defineTest("scanUrl", {
 		'// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=',
 		// ── 含大量路径段和查询参数的长 URL ───────────────────────────────────
 		"https://example.com/very/long/path/to/some/resource.json?format=pretty&indent=2&timestamp=1234567890#results",
+		// ── 含中文路径和查询参数的 URL ────────────────────────────────────────
+		"访问 https://example.com/中文路径 获取详情",
+		"https://example.com/search?q=中文关键词",
+		// ── 含 emoji 的 URL ───────────────────────────────────────────────────
+		"See https://example.com/path/🎉/page for info",
+		// ── 尾部标点被裁剪 ────────────────────────────────────────────────────
+		"Visit https://a.com/test. for more.",
+		"Found at https://a.com/test, see also.",
+		"Click https://a.com/test! now.",
+		"Is it https://a.com/test? yes.",
+		"See (https://a.com/test) for details.",
+		"Docs [https://a.com/test] here.",
 	],
 });
